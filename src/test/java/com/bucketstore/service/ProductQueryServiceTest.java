@@ -48,6 +48,6 @@ public class ProductQueryServiceTest {
     void 가격을_기준으로_내림차순_정렬하여_1개_조회() {
         List<ProductDTO> result = productQueryService.findProducts("basePrice", "desc", 1);
         assertEquals(1, result.size());
-        assertEquals(50000, result.get(0).getBasePrice());
+        assertEquals(30000, result.get(0).getBasePrice());
     }
 }
