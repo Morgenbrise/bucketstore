@@ -1,1 +1,10 @@
-spring.application.name=bucketstore
+spring:
+  application:
+    name : bucketstore
+
+  datasource:
+    mysql:
+      url: jdbc:mysql://localhost:3306/master_db
+      username: root
+      password: password
+      driver-class-name: com.mysql.cj.jdbc.Driver
