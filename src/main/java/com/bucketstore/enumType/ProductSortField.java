@@ -1,10 +1,12 @@
 package com.bucketstore.enumType;
 
 import com.bucketstore.inter.SortField;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 
+@Schema(description = "상품 정렬 필드 코드", example = "PRICE")
 public enum ProductSortField implements SortField {
 
     CREATED("CREATED", "등록일", "createdAt"),

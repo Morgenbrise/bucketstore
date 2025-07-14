@@ -1,5 +1,8 @@
 package com.bucketstore.enumType;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "정렬 방향", example = "ASC")
 public enum SortDirection {
 
     ASC, DESC;

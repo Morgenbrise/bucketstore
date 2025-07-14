@@ -20,3 +20,6 @@ springdoc:
     display-request-duration: true
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+
+server:
+  port: 8088
