@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Order extends BaseEntity {
+public class Orders extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;

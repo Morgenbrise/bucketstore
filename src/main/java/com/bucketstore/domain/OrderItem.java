@@ -14,7 +14,7 @@ public class OrderItem extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "orderId")
-    private Order order;
+    private Orders order;
 
     @ManyToOne
     @JoinColumn(name = "productId")

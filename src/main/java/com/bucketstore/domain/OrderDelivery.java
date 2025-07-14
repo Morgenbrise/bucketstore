@@ -19,5 +19,5 @@ public class OrderDelivery extends BaseEntity {
 
     @OneToOne
     @MapsId
-    private Order order;
+    private Orders order;
 }

@@ -20,5 +20,5 @@ public class User extends BaseEntity {
     private String zipCode;
 
     @OneToMany(mappedBy = "user")
-    private List<Order> orders = new ArrayList<>();
+    private List<Orders> orders = new ArrayList<>();
 }
