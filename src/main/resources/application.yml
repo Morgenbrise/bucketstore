@@ -8,3 +8,10 @@ spring:
       username: root
       password: password
       driver-class-name: com.mysql.cj.jdbc.Driver
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
