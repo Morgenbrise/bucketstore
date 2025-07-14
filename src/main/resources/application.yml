@@ -18,8 +18,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     display-request-duration: true
+    defaultModelsExpandDepth: 2
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true
 
 server:
   port: 8088

@@ -29,8 +29,8 @@ public class ProductController {
         List<SortCondition> conditions = request.getSort() == null ? List.of() :
                 request.getSort().stream()
                         .map(dto -> new SortCondition(
-                                ProductSortField.from(dto.code()),
-                                SortDirection.from(dto.direction())))
+                                ProductSortField.from(dto.code().getCode()),
+                                SortDirection.from(dto.direction().name())))
                         .toList();
 
         List<ProductDTO> result = productService.findProducts(request.getPage(), request.getSize(), conditions);

@@ -8,7 +8,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import java.util.List;
 
 @Getter
-@ParameterObject
 @AllArgsConstructor
 public class ProductSearchRequest {
 
