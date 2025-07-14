@@ -1,9 +1,6 @@
 package com.bucketstore.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -17,5 +14,6 @@ public class ProductDelivery extends BaseEntity {
 
     @OneToOne
     @MapsId
+    @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 }

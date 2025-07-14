@@ -19,22 +19,24 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "com.*",
+        basePackages = "com.bucketstore.repository",
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
         transactionManagerRef = "mysqlTransactionManager"
 )
 public class MysqlDataSourceConfig {
 
-    @Primary
     @Bean(name = "mysqlDataSource")
+    @Primary
     @ConfigurationProperties(prefix = "spring.datasource.mysql")
-    public DataSource masterDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource mysqlDataSource() {
+        return DataSourceBuilder.create()
+                .type(com.zaxxer.hikari.HikariDataSource.class)
+                .build();
     }
 
     @Primary
     @Bean(name = "mysqlEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean masterEntityManagerFactory(
+    public LocalContainerEntityManagerFactoryBean mysqlEntityManagerFactory(
             @Qualifier("mysqlDataSource") DataSource dataSource, EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSource)
@@ -45,7 +47,7 @@ public class MysqlDataSourceConfig {
 
     @Primary
     @Bean(name = "mysqlTransactionManager")
-    public PlatformTransactionManager masterTransactionManager(
+    public PlatformTransactionManager mysqlTransactionManager(
             @Qualifier("mysqlEntityManagerFactory") EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }

@@ -4,7 +4,7 @@ spring:
 
   datasource:
     mysql:
-      url: jdbc:mysql://localhost:3306/master_db
-      username: root
-      password: password
+      jdbc-url: jdbc:mysql://172.16.73.2:3306/bucketstore
+      username: bucketstore
+      password: bucketstore
       driver-class-name: com.mysql.cj.jdbc.Driver

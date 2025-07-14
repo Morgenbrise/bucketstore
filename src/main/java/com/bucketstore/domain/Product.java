@@ -1,13 +1,17 @@
 package com.bucketstore.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +28,15 @@ public class Product extends BaseEntity {
 
     @OneToOne(mappedBy = "product")
     private ProductDelivery delivery;
+
+    @Builder
+    public Product(String productCode, String productName, String category, String brand, int basePrice, String description) {
+        this.productCode = productCode;
+        this.productName = productName;
+        this.category = category;
+        this.brand = brand;
+        this.basePrice = basePrice;
+        this.description = description;
+    }
+
 }
