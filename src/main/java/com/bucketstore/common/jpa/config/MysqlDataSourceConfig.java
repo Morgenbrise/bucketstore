@@ -20,8 +20,8 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.*",
-        entityManagerFactoryRef = "masterEntityManagerFactory",
-        transactionManagerRef = "masterTransactionManager"
+        entityManagerFactoryRef = "mysqlEntityManagerFactory",
+        transactionManagerRef = "mysqlTransactionManager"
 )
 public class MysqlDataSourceConfig {
 
@@ -38,8 +38,8 @@ public class MysqlDataSourceConfig {
             @Qualifier("mysqlDataSource") DataSource dataSource, EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSource)
-                .packages("")
-                .persistenceUnit("master")
+                .packages("com.bucketstore.domain")
+                .persistenceUnit("mysql")
                 .build();
     }
 
