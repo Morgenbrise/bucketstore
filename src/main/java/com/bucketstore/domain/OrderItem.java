@@ -16,6 +16,10 @@ public class OrderItem extends BaseEntity {
     private Long orderItemId;
     private Integer quantity;
     private Integer itemPrice;
+    @Convert(converter = OrderItemStatus.ConverterImpl.class)
+    @Builder.Default
+    private OrderItemStatus itemStatus = OrderItemStatus.ORDERED;
+    private Integer deliveryFee;
 
     @ManyToOne
     @JoinColumn(name = "orderId")
@@ -30,12 +34,9 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "optionId")
     private ProductOption option;
 
-    @Convert(converter = OrderItemStatus.ConverterImpl.class)
-    @Builder.Default
-    private OrderItemStatus itemStatus = OrderItemStatus.ORDERED;
-
     public void cancel() {
         this.itemStatus = OrderItemStatus.CANCELED;
+        this.deliveryFee = 3000;
     }
 
     public boolean isCanceled() {

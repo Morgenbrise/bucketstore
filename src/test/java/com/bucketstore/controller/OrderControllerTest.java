@@ -1,8 +1,11 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.domain.Orders;
+import com.bucketstore.dto.detail.OrderDetailResponse;
+import com.bucketstore.dto.detail.OrderItemResponse;
 import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.enums.status.OrderStatus;
+import com.bucketstore.service.OrderDetailService;
 import com.bucketstore.service.OrdersService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,6 +37,10 @@ class OrderControllerTest {
 
     @MockBean
     private OrdersService ordersService;
+
+    @MockBean
+    private OrderDetailService orderDetailService;
+
 
     @Test
     void 주문_생성_API_성공() throws Exception {
@@ -127,5 +136,40 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$[1].ORDER_CODE").value("ORDER002"))
                 .andExpect(jsonPath("$[1].ORDER_STATUS").value("CANCELED"));
 
+    }
+
+    @Test
+    void 특정_주문_정보를_조회_할수있다() throws Exception {
+        // given
+        Long orderId = 1L;
+        List<OrderItemResponse> items = List.of(
+                OrderItemResponse.builder()
+                        .productName("상품A")
+                        .size("M")
+                        .quantity(1)
+                        .unitPrice(10000)
+                        .totalPrice(10000)
+                        .itemPrice(10000)
+                        .status("주문됨")
+                        .build()
+        );
+
+        OrderDetailResponse response = OrderDetailResponse.builder()
+                .orderId(orderId)
+                .orderCode("ORDER001")
+                .totalPrice(10000)
+                .items(items)
+                .canceledItems(Collections.emptyList())
+                .build();
+
+        given(orderDetailService.findOrderDetail(orderId)).willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/orders/{orderId}", orderId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ORDER_CODE").value("ORDER001"))
+                .andExpect(jsonPath("$.ITEMS[0].PRODUCT_NAME").value("상품A"))
+                .andDo(MockMvcResultHandlers.print());
     }
 }

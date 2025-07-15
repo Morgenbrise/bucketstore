@@ -1,10 +1,12 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.domain.Orders;
+import com.bucketstore.dto.detail.OrderDetailResponse;
 import com.bucketstore.dto.order.CancelOrderRequest;
 import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.dto.order.OrderSearchRequest;
+import com.bucketstore.service.OrderDetailService;
 import com.bucketstore.service.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,6 +28,8 @@ import java.util.List;
 public class OrderController {
 
     private final OrdersService ordersService;
+    private final OrderDetailService orderDetailService;
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,5 +66,12 @@ public class OrderController {
     ) {
         List<OrderResponse> result = ordersService.findOrders(request);
         return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "주문 상세 조회", description = "주문 식별자로 주문 상세 정보를 조회합니다.")
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable Long orderId) {
+        OrderDetailResponse response = orderDetailService.findOrderDetail(orderId);
+        return ResponseEntity.ok(response);
     }
 }
