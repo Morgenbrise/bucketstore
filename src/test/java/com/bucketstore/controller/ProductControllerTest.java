@@ -56,7 +56,7 @@ class ProductControllerTest {
         )).thenReturn(mockProducts);
 
         // when & then
-        mockMvc.perform(get("/api/products")
+        mockMvc.perform(get("/api/products/search")
                         .param("page", "0")
                         .param("size", "2")
                         .param("sort[0].code", "PRICE")

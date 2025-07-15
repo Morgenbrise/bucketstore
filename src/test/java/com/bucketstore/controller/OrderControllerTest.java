@@ -1,0 +1,81 @@
+package com.bucketstore.controller;
+
+import com.bucketstore.domain.Orders;
+import com.bucketstore.dto.order.OrderCreateRequest;
+import com.bucketstore.enums.OrderStatus;
+import com.bucketstore.service.OrdersService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class OrderControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private OrdersService ordersService;
+
+    @Test
+    void 주문_생성_API_성공() throws Exception {
+        // given
+        Orders mockOrders = Orders.builder()
+                .orderCode("ORDER_20250715_ABC123")
+                .orderStatus(OrderStatus.PENDING)
+                .totalPrice(20000)
+                .deliveryFee(3000)
+                .orderDate(LocalDateTime.now())
+                .build();
+
+        given(ordersService.createOrder(any())).willReturn(mockOrders);
+
+        String requestJson = """
+            {
+              "USER_ID": 1,
+              "ITEMS": [
+                {
+                  "PRODUCT_CODE": "PROD001",
+                  "SIZE": "M",
+                  "QUANTITY": 2
+                }
+              ],
+              "DELIVERY": {
+                "RECEIVER_NAME": "홍길동",
+                "PHONE_NUMBER": "010-1234-5678",
+                "ADDRESS": "서울",
+                "ZIP_CODE": "12345",
+                "DELIVERY_MESSAGE": "문 앞"
+              }
+            }
+        """;
+
+        // when & then
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.ORDER_CODE").value("ORDER_20250715_ABC123"))
+                .andExpect(jsonPath("$.ORDER_STATUS").value("PENDING"))
+                .andExpect(jsonPath("$.TOTAL_PRICE").value(20000))
+                .andExpect(jsonPath("$.DELIVERY_FEE").value(3000));
+
+    }
+}
