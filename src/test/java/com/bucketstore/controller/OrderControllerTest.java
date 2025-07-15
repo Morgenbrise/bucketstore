@@ -1,17 +1,13 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.domain.Orders;
-import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
-import com.bucketstore.enums.OrderStatus;
+import com.bucketstore.enums.status.OrderStatus;
 import com.bucketstore.service.OrdersService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;

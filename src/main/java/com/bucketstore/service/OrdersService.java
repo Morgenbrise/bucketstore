@@ -4,9 +4,9 @@ import com.bucketstore.domain.*;
 import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.dto.order.OrderSearchRequest;
-import com.bucketstore.enums.OrderDisplayableCode;
-import com.bucketstore.enums.OrderStatus;
-import com.bucketstore.enums.SortCondition;
+import com.bucketstore.enums.sort.OrderSort;
+import com.bucketstore.enums.status.OrderStatus;
+import com.bucketstore.common.enums.SortCondition;
 import com.bucketstore.repository.order.OrderDeliveryRepository;
 import com.bucketstore.repository.order.OrdersRepository;
 import com.bucketstore.repository.orderItem.OrderItemRepository;
@@ -141,7 +141,7 @@ public class OrdersService {
 
     public List<OrderResponse> findOrders(OrderSearchRequest request) {
         List<SortCondition> sortConditions = request.sort().stream()
-                .map(s -> new SortCondition(OrderDisplayableCode.from(s.getCode()), s.getDirection()))
+                .map(s -> new SortCondition(OrderSort.from(s.getCode()), s.getDirection()))
                 .toList();
         return ordersRepository.findOrders(request);
 

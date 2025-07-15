@@ -1,4 +1,4 @@
-package com.bucketstore.enums;
+package com.bucketstore.common.enums;
 
 import com.querydsl.core.types.Order;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,8 +1,6 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.dto.product.ProductDTO;
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortDirection;
 import com.bucketstore.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

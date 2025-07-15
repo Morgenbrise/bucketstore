@@ -1,7 +1,6 @@
 package com.bucketstore.common.dto;
 
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortDirection;
+import com.bucketstore.common.enums.SortDirection;
 import com.bucketstore.ports.SortableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -2,10 +2,6 @@ package com.bucketstore.controller;
 
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
-import com.bucketstore.enums.OrderDisplayableCode;
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortCondition;
-import com.bucketstore.enums.SortDirection;
 import com.bucketstore.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

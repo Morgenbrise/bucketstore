@@ -1,10 +1,8 @@
 package com.bucketstore.common.utils;
 
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortCondition;
-import com.bucketstore.enums.SortDirection;
-import com.bucketstore.ports.DisplayableCode;
-import com.bucketstore.ports.SortableField;
+import com.bucketstore.enums.sort.ProductSort;
+import com.bucketstore.common.enums.SortCondition;
+import com.bucketstore.common.enums.SortDirection;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,7 +39,7 @@ public class PageRequestUtils {
     public static Pageable of(int page, int size, List<SortCondition> sortConditions) {
         if (sortConditions == null || sortConditions.isEmpty()) {
             // fallback: 기본 정렬
-            return PageRequest.of(page, size, Sort.by(ProductDisplayableCode.CREATED.toOrder(SortDirection.DESC)));
+            return PageRequest.of(page, size, Sort.by(ProductSort.CREATED.toOrder(SortDirection.DESC)));
         }
 
         List<Sort.Order> orders = sortConditions.stream()

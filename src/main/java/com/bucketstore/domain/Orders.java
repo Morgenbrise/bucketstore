@@ -1,6 +1,6 @@
 package com.bucketstore.domain;
 
-import com.bucketstore.enums.OrderStatus;
+import com.bucketstore.enums.status.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

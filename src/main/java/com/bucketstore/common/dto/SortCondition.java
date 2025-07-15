@@ -1,6 +1,5 @@
-package com.bucketstore.enums;
+package com.bucketstore.common.enums;
 
-import com.bucketstore.ports.DisplayableCode;
 import com.bucketstore.ports.SortableField;
 
 public record SortCondition(SortableField field, SortDirection direction) {}

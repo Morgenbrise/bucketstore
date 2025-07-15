@@ -1,4 +1,4 @@
-package com.bucketstore.enums;
+package com.bucketstore.enums.status;
 
 import com.bucketstore.ports.DisplayableCode;
 import jakarta.persistence.AttributeConverter;

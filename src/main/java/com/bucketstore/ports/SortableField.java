@@ -1,6 +1,6 @@
 package com.bucketstore.ports;
 
-import com.bucketstore.enums.SortDirection;
+import com.bucketstore.common.enums.SortDirection;
 import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.domain.Sort;
 

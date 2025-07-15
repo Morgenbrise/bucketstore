@@ -4,9 +4,8 @@ import com.bucketstore.common.utils.PageRequestUtils;
 import com.bucketstore.domain.QProduct;
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
-import com.bucketstore.enums.OrderDisplayableCode;
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortCondition;
+import com.bucketstore.enums.sort.ProductSort;
+import com.bucketstore.common.enums.SortCondition;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,7 +31,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         Pageable pageable = PageRequestUtils.of(request.getPage(), request.getSize());
 
         List<SortCondition> conditions = request.getSort().stream()
-                .map(s -> new SortCondition(ProductDisplayableCode.from(s.getCode()), s.getDirection()))
+                .map(s -> new SortCondition(ProductSort.from(s.getCode()), s.getDirection()))
                 .toList();
 
         // 쿼리

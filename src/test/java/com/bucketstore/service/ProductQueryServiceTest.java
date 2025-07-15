@@ -4,7 +4,7 @@ import com.bucketstore.common.dto.SortConditionDTO;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
-import com.bucketstore.enums.SortDirection;
+import com.bucketstore.common.enums.SortDirection;
 import com.bucketstore.repository.product.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
