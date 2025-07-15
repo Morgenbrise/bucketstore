@@ -1,64 +1,112 @@
 package com.bucketstore.service;
 
-import com.bucketstore.domain.OrderItem;
-import com.bucketstore.domain.Orders;
-import com.bucketstore.domain.Product;
-import com.bucketstore.domain.Users;
+import com.bucketstore.domain.*;
+import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.enums.OrderStatus;
+import com.bucketstore.repository.order.OrderDeliveryRepository;
 import com.bucketstore.repository.order.OrdersRepository;
 import com.bucketstore.repository.orderItem.OrderItemRepository;
 import com.bucketstore.repository.product.ProductRepository;
+import com.bucketstore.repository.product.ProductOptionRepository;
 import com.bucketstore.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class OrdersService {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
     private final OrdersRepository ordersRepository;
     private final OrderItemRepository orderItemRepository;
+    private final OrderDeliveryRepository orderDeliveryRepository;
 
-    public void createOrder(List<String> productCodes) {
-        List<Product> products = productRepository.findByProductCodeIn(productCodes);
+    @Transactional
+    public Orders createOrder(OrderCreateRequest request) {
+        // 1. 사용자 확인
+        Users user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보가 없습니다."));
 
-        if (products.size() != productCodes.size()) {
-            throw new IllegalArgumentException("유효하지 않은 상품 코드가 포함되어 있습니다.");
-        }
-
-        // 임시 유저 (id=1)
-        Users users = userRepository.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("유저가 존재하지 않습니다."));
+        // 2. 주문 코드 생성
+        String orderCode = generateOrderCode();
 
         Orders order = Orders.builder()
-                .orderCode(UUID.randomUUID().toString())
+                .users(user)
+                .orderCode(orderCode)
                 .orderStatus(OrderStatus.PENDING)
-                .users(users)
                 .orderDate(LocalDateTime.now())
-                .totalPrice(products.stream().mapToInt(Product::getBasePrice).sum())
-                .deliveryFee(0)
                 .build();
 
         ordersRepository.save(order);
 
-        for (Product product : products) {
-            OrderItem item = OrderItem.builder()
+        int totalPrice = 0;
+        int totalDeliveryFee = 0;
+
+        // 3. 상품 처리
+        for (OrderCreateRequest.OrderItemRequest itemRequest : request.items()) {
+            Product product = productRepository.findByProductCode(itemRequest.productCode())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다: " + itemRequest.productCode()));
+
+            ProductOption option = productOptionRepository.findByProductAndSize(product, itemRequest.size())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 사이즈의 옵션이 없습니다: " + itemRequest.productCode() + " - " + itemRequest.size()));
+
+            if (option.getStockQty() < itemRequest.quantity()) {
+                throw new IllegalArgumentException("재고가 부족합니다: " + itemRequest.productCode());
+            }
+
+            option.reduceStock(itemRequest.quantity());
+
+            int itemPrice = (product.getBasePrice() + option.getAdditionalPrice()) * itemRequest.quantity();
+            totalPrice += itemPrice;
+
+            OrderItem orderItem = OrderItem.builder()
                     .order(order)
                     .product(product)
-                    .option(null) // 추후 옵션 선택 기능 추가 시 적용
-                    .quantity(1)
-                    .itemPrice(product.getBasePrice())
+                    .option(option)
+                    .quantity(itemRequest.quantity())
+                    .itemPrice(itemPrice)
                     .build();
 
-            orderItemRepository.save(item);
+            order.addOrderItem(orderItem);
         }
 
+        // 4. 배송비 계산 (상품 개별 배송정책이 있다면 확장 가능)
+        if (totalPrice < 50000) {
+            totalDeliveryFee = 3000;
+        }
+
+        order.updatePrice(totalPrice, totalDeliveryFee);
+
+        // 5. 배송지 저장
+        OrderCreateRequest.DeliveryRequest d = request.delivery();
+
+        OrderDelivery delivery = OrderDelivery.builder()
+                .order(order)
+                .receiverName(d.receiverName())
+                .phoneNumber(d.phoneNumber())
+                .address(d.address())
+                .zipCode(d.zipCode())
+                .deliveryMessage(d.deliveryMessage())
+                .build();
+
+        order.setDelivery(delivery);
+
+        return order;
+    }
+
+    private String generateOrderCode() {
+        return "ORDER_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
 }

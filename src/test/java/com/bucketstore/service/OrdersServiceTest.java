@@ -1,8 +1,11 @@
 package com.bucketstore.service;
 
+import com.bucketstore.domain.OrderDelivery;
 import com.bucketstore.domain.OrderItem;
 import com.bucketstore.domain.Orders;
 import com.bucketstore.domain.Product;
+import com.bucketstore.dto.order.OrderCreateRequest;
+import com.bucketstore.enums.OrderStatus;
 import com.bucketstore.repository.order.OrdersRepository;
 import com.bucketstore.repository.orderItem.OrderItemRepository;
 import com.bucketstore.repository.product.ProductRepository;
@@ -43,20 +46,34 @@ public class OrdersServiceTest {
     @Test
     void 상품_코드_리스트로_주문_생성_성공() {
         // given
-        List<String> productCodes = List.of("PROD001", "PROD002");
+        OrderCreateRequest request = new OrderCreateRequest(
+                1L,
+                List.of(new OrderCreateRequest.OrderItemRequest("PROD001", "M", 2)),
+                new OrderCreateRequest.DeliveryRequest(
+                        "홍길동",
+                        "010-1234-5678",
+                        "서울시 강남구",
+                        "06236",
+                        "문 앞에 두세요"
+                )
+        );
 
         // when
-        ordersService.createOrder(productCodes);
+        Orders order = ordersService.createOrder(request);
 
         // then
-        List<Orders> orders = ordersRepository.findAll();
-        assertEquals(1, orders.size());
+        assertNotNull(order.getOrderId());
+        assertEquals(OrderStatus.PENDING, order.getOrderStatus());
+        assertEquals(1, order.getOrderItems().size());
 
-        List<OrderItem> items = orderItemRepository.findAll();
-        assertEquals(2, items.size());
+        OrderItem item = order.getOrderItems().get(0);
+        assertEquals(2, item.getQuantity());
+        assertEquals(1, item.getProduct().getProductId());
+        assertEquals("M", item.getOption().getSize());
 
-        assertTrue(items.stream().anyMatch(i -> i.getProduct().getProductCode().equals("PROD001")));
-        assertTrue(items.stream().anyMatch(i -> i.getProduct().getProductCode().equals("PROD002")));
+        OrderDelivery delivery = order.getDelivery();
+        assertEquals("홍길동", delivery.getReceiverName());
+        assertEquals("서울시 강남구", delivery.getAddress());
     }
 
 }

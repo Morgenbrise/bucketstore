@@ -29,9 +29,28 @@ public class Orders extends BaseEntity {
     @JoinColumn(name = "userId")
     private Users users;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order")
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderDelivery delivery;
+
+    public void updatePrice(int totalPrice, int deliveryFee) {
+        this.totalPrice = totalPrice;
+        this.deliveryFee = deliveryFee;
+    }
+
+    public void addOrderItem(OrderItem item) {
+        if (orderItems == null) {
+            orderItems = new ArrayList<>();
+        }
+        this.orderItems.add(item);
+        item.setOrder(this); // 양방향 연결
+    }
+
+    public void setDelivery(OrderDelivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this); // 양방향 연관 유지
+    }
 }

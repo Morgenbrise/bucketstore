@@ -18,4 +18,8 @@ public class ProductOption extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "productId")
     private Product product;
+
+    public void reduceStock(int quantity) {
+        stockQty =- quantity;
+    }
 }
