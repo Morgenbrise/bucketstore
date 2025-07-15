@@ -9,12 +9,13 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@ParameterObject
 public class ProductSearchRequest {
 
-    @Schema(description = "페이지 번호", example = "0")
+    @Schema(description = "페이지 번호 (0부터 시작)", example = "0")
     private final int page;
 
-    @Schema(description = "페이지 사이즈", example = "10")
+    @Schema(description = "페이지 크기", example = "10")
     private final int size;
 
     @Schema(description = "정렬 조건 리스트")

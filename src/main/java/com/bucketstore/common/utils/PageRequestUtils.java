@@ -14,6 +14,15 @@ public class PageRequestUtils {
 
     private PageRequestUtils() {} // 인스턴스화 방지
 
+    /**
+     * 입력된 정렬 조건에 따라 PageRequest 객체를 생성한다.
+     *
+     * @param page         페이지 번호 (0부터 시작)
+     * @param size         페이지 사이즈
+     * @param direction    정렬 방법
+     * @param sortField    정렬 조건 리스트
+     * @return PageRequest
+     */
     public static Pageable of(int page, int size, SortDirection direction, SortField sortField) {
         if (page < 0) throw new IllegalArgumentException("page must be 0 or greater");
         if (size <= 0) throw new IllegalArgumentException("size must be greater than 0");
@@ -21,7 +30,14 @@ public class PageRequestUtils {
         return PageRequest.of(page, size, Sort.by(sortField.toOrder(direction)));
     }
 
-    // 복수 정렬 필드용
+    /**
+     * 입력된 정렬 조건에 따라 PageRequest 객체를 생성한다.
+     *
+     * @param page         페이지 번호 (0부터 시작)
+     * @param size         페이지 사이즈
+     * @param sortConditions    정렬 조건 리스트
+     * @return PageRequest
+     */
     public static Pageable of(int page, int size, List<SortCondition> sortConditions) {
         if (sortConditions == null || sortConditions.isEmpty()) {
             // fallback: 기본 정렬
