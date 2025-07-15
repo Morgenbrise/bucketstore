@@ -33,8 +33,6 @@ public class OrdersService {
     private final OrderItemRepository orderItemRepository;
     private final OrderDeliveryRepository orderDeliveryRepository;
 
-    private static final int CANCEL_DELIVERY_DISCOUNT = 3000;
-
     @Transactional
     public Orders createOrder(OrderCreateRequest request) {
         // 1. 사용자 확인
@@ -115,6 +113,8 @@ public class OrdersService {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
 
+        List<OrderItem> orderItems = order.getOrderItems();
+
         for (Long itemId : orderItemIds) {
             OrderItem item = orderItemRepository.findById(itemId)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 항목입니다."));
@@ -124,13 +124,12 @@ public class OrdersService {
             }
 
             if (!item.isCanceled()) {
-                item.cancel();
-                order.cancelOrderItem(item, CANCEL_DELIVERY_DISCOUNT);  // 배송비 3,000 차감
+                order.cancelOrderItem(item);  // 배송비 3,000 차감
             }
         }
 
         // 모든 항목이 취소됐는지 검사 후 주문 상태 변경
-        boolean allCanceled = order.getOrderItems().stream().allMatch(OrderItem::isCanceled);
+        boolean allCanceled = orderItems.stream().allMatch(OrderItem::isCanceled);
 
         if (allCanceled) {
             order.changeStatus(OrderStatus.CANCELLED);

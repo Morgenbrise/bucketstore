@@ -54,10 +54,9 @@ public class Orders extends BaseEntity {
         delivery.setOrder(this); // 양방향 연관 유지
     }
 
-    public void cancelOrderItem(OrderItem item, int deliveryDiscount) {
+    public void cancelOrderItem(OrderItem item) {
         item.cancel();
-        int updatedTotal = this.totalPrice - deliveryDiscount;
-        this.totalPrice = Math.max(0, updatedTotal); // 0 이하 방지
+        this.totalPrice -= item.getItemPrice();
     }
 
     public void changeStatus(OrderStatus newStatus) {

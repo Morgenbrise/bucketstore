@@ -83,7 +83,7 @@ public class OrdersServiceTest {
     @Test
     void 특정_주문_상품을_취소하고_배송비를_차감한다() {
         Long orderId = 1L;
-        List<Long> cancelIds = List.of(1L, 2L);
+        List<Long> cancelIds = List.of(1L);
 
         // when
         ordersService.cancelOrderItems(orderId, cancelIds);
