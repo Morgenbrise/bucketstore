@@ -1,13 +1,14 @@
 package com.bucketstore.enums;
 
-import com.bucketstore.ports.SortField;
+import com.bucketstore.ports.DisplayableCode;
+import com.bucketstore.ports.SortableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 
 @Schema(description = "상품 정렬 필드 코드", example = "PRICE")
-public enum ProductSortField implements SortField {
+public enum ProductDisplayableCode implements SortableField {
 
     CREATED("CREATED", "등록일", "createdAt"),
     NAME("NAME", "상품명", "productName"),
@@ -18,7 +19,7 @@ public enum ProductSortField implements SortField {
     private final String label;
     private final String fieldName;
 
-    ProductSortField(String code, String label, String fieldName) {
+    ProductDisplayableCode(String code, String label, String fieldName) {
         this.code = code;
         this.label = label;
         this.fieldName = fieldName;
@@ -39,7 +40,7 @@ public enum ProductSortField implements SortField {
         return label;
     }
 
-    public static ProductSortField from(String code) {
+    public static ProductDisplayableCode from(String code) {
         if (code == null) return CREATED;
         return Arrays.stream(values())
                 .filter(f -> f.code.equalsIgnoreCase(code))

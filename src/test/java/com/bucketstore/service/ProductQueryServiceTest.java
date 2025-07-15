@@ -3,7 +3,7 @@ package com.bucketstore.service;
 import com.bucketstore.common.utils.PageRequestUtils;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.product.ProductDTO;
-import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortCondition;
 import com.bucketstore.enums.SortDirection;
 import com.bucketstore.repository.product.ProductRepository;
@@ -43,7 +43,7 @@ public class ProductQueryServiceTest {
     @Test
     void 상품명으로_오름차순_정렬() {
 
-        List<SortCondition> sortConditions = List.of(new SortCondition(ProductSortField.NAME, SortDirection.ASC));
+        List<SortCondition> sortConditions = List.of(new SortCondition(ProductDisplayableCode.NAME, SortDirection.ASC));
         List<ProductDTO> result = productQueryService.findProducts(0, 2, sortConditions);
 
         assertEquals(2, result.size());
@@ -53,7 +53,7 @@ public class ProductQueryServiceTest {
 
     @Test
     void 가격으로_내림차순_정렬() {
-        List<SortCondition> sortConditions = List.of(new SortCondition(ProductSortField.PRICE, SortDirection.DESC));
+        List<SortCondition> sortConditions = List.of(new SortCondition(ProductDisplayableCode.PRICE, SortDirection.DESC));
 
         List<ProductDTO> result = productQueryService.findProducts(0, 1, sortConditions);
 

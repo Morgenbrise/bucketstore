@@ -2,7 +2,7 @@ package com.bucketstore.controller;
 
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
-import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortCondition;
 import com.bucketstore.enums.SortDirection;
 import com.bucketstore.service.ProductService;
@@ -45,7 +45,7 @@ public class ProductController {
         List<SortCondition> conditions = request.getSort() == null ? List.of() :
                 request.getSort().stream()
                         .map(dto -> new SortCondition(
-                                ProductSortField.from(dto.code().getCode()),
+                                ProductDisplayableCode.from(dto.code().getCode()),
                                 SortDirection.from(dto.direction().name())))
                         .toList();
 

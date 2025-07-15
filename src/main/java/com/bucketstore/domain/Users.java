@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
-public class User extends BaseEntity {
+public class Users extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -19,6 +19,6 @@ public class User extends BaseEntity {
     private String address;
     private String zipCode;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Orders> orders = new ArrayList<>();
 }

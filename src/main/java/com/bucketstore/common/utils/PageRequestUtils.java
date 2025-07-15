@@ -1,9 +1,10 @@
 package com.bucketstore.common.utils;
 
-import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortCondition;
 import com.bucketstore.enums.SortDirection;
-import com.bucketstore.ports.SortField;
+import com.bucketstore.ports.DisplayableCode;
+import com.bucketstore.ports.SortableField;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,14 +21,14 @@ public class PageRequestUtils {
      * @param page         페이지 번호 (0부터 시작)
      * @param size         페이지 사이즈
      * @param direction    정렬 방법
-     * @param sortField    정렬 조건 리스트
+     * @param sortableField    정렬 조건 리스트
      * @return PageRequest
      */
-    public static Pageable of(int page, int size, SortDirection direction, SortField sortField) {
+    public static Pageable of(int page, int size, SortDirection direction, SortableField sortableField) {
         if (page < 0) throw new IllegalArgumentException("page must be 0 or greater");
         if (size <= 0) throw new IllegalArgumentException("size must be greater than 0");
 
-        return PageRequest.of(page, size, Sort.by(sortField.toOrder(direction)));
+        return PageRequest.of(page, size, Sort.by(sortableField.toOrder(direction)));
     }
 
     /**
@@ -41,7 +42,7 @@ public class PageRequestUtils {
     public static Pageable of(int page, int size, List<SortCondition> sortConditions) {
         if (sortConditions == null || sortConditions.isEmpty()) {
             // fallback: 기본 정렬
-            return PageRequest.of(page, size, Sort.by(ProductSortField.CREATED.toOrder(SortDirection.DESC)));
+            return PageRequest.of(page, size, Sort.by(ProductDisplayableCode.CREATED.toOrder(SortDirection.DESC)));
         }
 
         List<Sort.Order> orders = sortConditions.stream()

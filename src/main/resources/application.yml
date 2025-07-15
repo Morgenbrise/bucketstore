@@ -10,9 +10,15 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    properties:
-      hibernate:
-        hbm2ddl.auto: none
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
 
 springdoc:
   swagger-ui:

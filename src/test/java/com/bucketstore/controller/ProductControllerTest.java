@@ -1,7 +1,7 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.dto.product.ProductDTO;
-import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortDirection;
 import com.bucketstore.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class ProductControllerTest {
                 eq(0), eq(2),
                 argThat(conditions ->
                         conditions.size() == 2 &&
-                                conditions.get(0).field() == ProductSortField.PRICE &&
+                                conditions.get(0).field() == ProductDisplayableCode.PRICE &&
                                 conditions.get(0).direction() == SortDirection.DESC
                 )
         )).thenReturn(mockProducts);
