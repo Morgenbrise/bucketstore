@@ -38,7 +38,7 @@ public class OrdersService {
 
         Orders order = Orders.builder()
                 .orderCode(UUID.randomUUID().toString())
-                .orderStatus(OrderStatus.PENDING.name())
+                .orderStatus(OrderStatus.PENDING)
                 .users(users)
                 .orderDate(LocalDateTime.now())
                 .totalPrice(products.stream().mapToInt(Product::getBasePrice).sum())

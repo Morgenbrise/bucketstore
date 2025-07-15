@@ -1,5 +1,6 @@
 package com.bucketstore.domain;
 
+import com.bucketstore.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +18,9 @@ public class Orders extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
     private String orderCode;
-    private String orderStatus;
+
+    @Convert(converter = OrderStatus.ConverterImpl.class)
+    private OrderStatus orderStatus;
     private Integer totalPrice;
     private Integer deliveryFee;
     private LocalDateTime orderDate;

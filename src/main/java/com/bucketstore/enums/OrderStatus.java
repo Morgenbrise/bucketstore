@@ -1,6 +1,8 @@
 package com.bucketstore.enums;
 
 import com.bucketstore.ports.DisplayableCode;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import java.util.Arrays;
 
@@ -35,4 +37,19 @@ public enum OrderStatus implements DisplayableCode {
                 .findFirst()
                 .orElse(PENDING);
     }
+
+    @Converter(autoApply = false)
+    public static class ConverterImpl implements AttributeConverter<OrderStatus, String> {
+
+        @Override
+        public String convertToDatabaseColumn(OrderStatus attribute) {
+            return attribute != null ? attribute.getCode() : null;
+        }
+
+        @Override
+        public OrderStatus convertToEntityAttribute(String dbData) {
+            return dbData != null ? OrderStatus.from(dbData) : null;
+        }
+    }
+
 }
