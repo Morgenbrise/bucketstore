@@ -48,8 +48,6 @@ public class OrdersService {
                 .orderDate(LocalDateTime.now())
                 .build();
 
-        ordersRepository.save(order);
-
         int totalPrice = 0;
         int totalDeliveryFee = 0;
 
@@ -102,7 +100,7 @@ public class OrdersService {
 
         order.setDelivery(delivery);
 
-        return order;
+        return ordersRepository.save(order);
     }
 
     private String generateOrderCode() {
