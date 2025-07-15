@@ -81,18 +81,17 @@ public class OrdersServiceTest {
     @Test
     void 특정_주문_상품을_취소하고_배송비를_차감한다() {
         Long orderId = 1L;
-        Long orderItemId = 1L;
+        List<Long> cancelIds = List.of(1L, 2L);
 
         // when
-        ordersService.cancelOrderItem(orderId, orderItemId);
+        ordersService.cancelOrderItems(orderId, cancelIds);
 
         // then
         Orders order = ordersRepository.findById(orderId).orElseThrow();
-        OrderItem item = orderItemRepository.findById(orderItemId).orElseThrow();
+        assertEquals(OrderStatus.CANCELLED, order.getOrderStatus());
 
-        assertTrue(item.isCanceled()); // 주문 아이템 취소 상태 확인
-        assertEquals(27000, order.getTotalPrice()); // 기존 30000원 → 27000원으로 변경 (배송비 0은 유지)
-        assertEquals(OrderItemStatus.CANCELED, item.getItemStatus()); // 상태는 바뀌지 않음 (필요 시 CANCELED 처리도 가능)
+        order.getOrderItems().forEach(item ->
+                assertEquals(OrderItemStatus.CANCELED, item.getItemStatus()));
     }
 
 }

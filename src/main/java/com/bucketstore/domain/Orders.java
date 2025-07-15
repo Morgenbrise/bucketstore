@@ -59,4 +59,8 @@ public class Orders extends BaseEntity {
         int updatedTotal = this.totalPrice - deliveryDiscount;
         this.totalPrice = Math.max(0, updatedTotal); // 0 이하 방지
     }
+
+    public void changeStatus(OrderStatus newStatus) {
+        this.orderStatus = newStatus;
+    }
 }

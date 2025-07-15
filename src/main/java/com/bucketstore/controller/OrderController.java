@@ -1,6 +1,7 @@
 package com.bucketstore.controller;
 
 import com.bucketstore.domain.Orders;
+import com.bucketstore.dto.order.CancelOrderRequest;
 import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.service.OrdersService;
@@ -40,5 +41,14 @@ public class OrderController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(OrderResponse.from(orders));
+    }
+
+    @Operation(summary = "주문 항목 취소", description = "주문 ID와 주문 항목 ID 목록을 받아 해당 항목을 취소하고, 전체 취소 시 주문 상태를 변경합니다.")
+    @DeleteMapping("/items")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelOrderItems(
+            @RequestBody @Valid CancelOrderRequest request
+    ) {
+        ordersService.cancelOrderItems(request.orderId(), request.orderItemIds());
     }
 }

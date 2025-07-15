@@ -20,7 +20,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -76,6 +79,22 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.ORDER_STATUS").value("PENDING"))
                 .andExpect(jsonPath("$.TOTAL_PRICE").value(20000))
                 .andExpect(jsonPath("$.DELIVERY_FEE").value(3000));
+    }
 
+    @Test
+    void DELETE_메서드로_주문_항목_여러_개를_취소할_수_있다() throws Exception {
+        String requestBody = """
+        {
+          "ORDER_ID": 1,
+          "ORDER_ITEM_IDS": [1, 2]
+        }
+    """;
+
+        mockMvc.perform(delete("/api/orders/items")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isNoContent());
+
+        verify(ordersService).cancelOrderItems(eq(1L), eq(List.of(1L, 2L)));
     }
 }

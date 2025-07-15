@@ -109,23 +109,31 @@ public class OrdersService {
         return "ORDER_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    public void cancelOrderItem(Long orderId, Long orderItemId) {
+    @Transactional
+    public void cancelOrderItems(Long orderId, List<Long> orderItemIds) {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
 
-        OrderItem item = orderItemRepository.findById(orderItemId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 아이템입니다."));
+        for (Long itemId : orderItemIds) {
+            OrderItem item = orderItemRepository.findById(itemId)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 항목입니다."));
 
-        if (!item.getOrder().getOrderId().equals(order.getOrderId())) {
-            throw new IllegalStateException("주문과 주문 아이템이 일치하지 않습니다.");
+            if(!orderId.equals(item.getOrder().getOrderId())) {
+                throw new IllegalStateException("주문과 주문 항목이 일치하지 않습니다.");
+            }
+
+            if (!item.isCanceled()) {
+                item.cancel();
+                order.cancelOrderItem(item, CANCEL_DELIVERY_DISCOUNT);  // 배송비 3,000 차감
+            }
         }
 
-        if (item.isCanceled()) {
-            throw new IllegalStateException("이미 취소된 주문 항목입니다.");
-        }
+        // 모든 항목이 취소됐는지 검사 후 주문 상태 변경
+        boolean allCanceled = order.getOrderItems().stream().allMatch(OrderItem::isCanceled);
 
-        // 취소 처리
-        order.cancelOrderItem(item, CANCEL_DELIVERY_DISCOUNT);
+        if (allCanceled) {
+            order.changeStatus(OrderStatus.CANCELLED);
+        }
     }
 
 }
