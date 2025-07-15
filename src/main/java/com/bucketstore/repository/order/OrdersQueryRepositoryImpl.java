@@ -6,7 +6,7 @@ import com.bucketstore.domain.QUsers;
 import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.dto.order.OrderSearchRequest;
 import com.bucketstore.enums.sort.OrderSort;
-import com.bucketstore.common.enums.SortCondition;
+import com.bucketstore.common.dto.ResolvedSortCondition;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,8 +32,8 @@ public class OrdersQueryRepositoryImpl implements OrdersQueryRepository {
 
         Pageable pageable = PageRequestUtils.of(request.page(), request.size());
 
-        List<SortCondition> conditions = request.sort().stream()
-                .map(s -> new SortCondition(OrderSort.from(s.getCode()), s.getDirection()))
+        List<ResolvedSortCondition> conditions = request.sort().stream()
+                .map(s -> new ResolvedSortCondition(OrderSort.from(s.getCode()), s.getDirection()))
                 .toList();
 
         return queryFactory

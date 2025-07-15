@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 @Getter
 @AllArgsConstructor
-public class SortConditionDTO {
+public class SortRequestCondition {
 
         @Schema(description = "정렬 필드 코드", example = "PRICE")
         private String code;

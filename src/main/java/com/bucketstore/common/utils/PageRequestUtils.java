@@ -1,7 +1,7 @@
 package com.bucketstore.common.utils;
 
 import com.bucketstore.enums.sort.ProductSort;
-import com.bucketstore.common.enums.SortCondition;
+import com.bucketstore.common.dto.ResolvedSortCondition;
 import com.bucketstore.common.enums.SortDirection;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +36,7 @@ public class PageRequestUtils {
      * @param sortConditions    정렬 조건 리스트
      * @return PageRequest
      */
-    public static Pageable of(int page, int size, List<SortCondition> sortConditions) {
+    public static Pageable of(int page, int size, List<ResolvedSortCondition> sortConditions) {
         if (sortConditions == null || sortConditions.isEmpty()) {
             // fallback: 기본 정렬
             return PageRequest.of(page, size, Sort.by(ProductSort.CREATED.toOrder(SortDirection.DESC)));
@@ -49,7 +49,7 @@ public class PageRequestUtils {
         return PageRequest.of(page, size, Sort.by(orders));
     }
 
-    public static Pageable of(int page, int size, SortCondition... sortConditions) {
+    public static Pageable of(int page, int size, ResolvedSortCondition... sortConditions) {
         return of(page, size, List.of(sortConditions));
     }
 

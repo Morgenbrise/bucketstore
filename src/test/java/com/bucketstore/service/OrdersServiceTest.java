@@ -1,6 +1,6 @@
 package com.bucketstore.service;
 
-import com.bucketstore.common.dto.SortConditionDTO;
+import com.bucketstore.common.dto.SortRequestCondition;
 import com.bucketstore.domain.OrderDelivery;
 import com.bucketstore.domain.OrderItem;
 import com.bucketstore.domain.Orders;
@@ -103,7 +103,7 @@ public class OrdersServiceTest {
         OrderSearchRequest request = new OrderSearchRequest(
                 0,
                 10,
-                List.of(new SortConditionDTO("PRICE", SortDirection.DESC))
+                List.of(new SortRequestCondition("PRICE", SortDirection.DESC))
         );
 
         // when
@@ -121,7 +121,7 @@ public class OrdersServiceTest {
         OrderSearchRequest request = new OrderSearchRequest(
                 0,
                 10,
-                List.of(new SortConditionDTO("CREATED", SortDirection.ASC))
+                List.of(new SortRequestCondition("CREATED", SortDirection.ASC))
         );
 
         List<OrderResponse> results = ordersService.findOrders(request);

@@ -1,6 +1,6 @@
 package com.bucketstore.dto.product;
 
-import com.bucketstore.common.dto.SortConditionDTO;
+import com.bucketstore.common.dto.SortRequestCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,6 @@ public class ProductSearchRequest {
     private final int size;
 
     @Schema(description = "정렬 조건 리스트")
-    private final List<SortConditionDTO> sort;
+    private final List<SortRequestCondition> sort;
 
 }

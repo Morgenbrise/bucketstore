@@ -1,6 +1,6 @@
 package com.bucketstore.service;
 
-import com.bucketstore.common.dto.SortConditionDTO;
+import com.bucketstore.common.dto.SortRequestCondition;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
@@ -40,7 +40,7 @@ public class ProductQueryServiceTest {
 
     @Test
     void 상품명으로_오름차순_정렬() {
-        ProductSearchRequest request = new ProductSearchRequest(0, 2, List.of(new SortConditionDTO("NAME", SortDirection.ASC)));
+        ProductSearchRequest request = new ProductSearchRequest(0, 2, List.of(new SortRequestCondition("NAME", SortDirection.ASC)));
 
         List<ProductDTO> result = productService.findProducts(request);
 
@@ -51,7 +51,7 @@ public class ProductQueryServiceTest {
 
     @Test
     void 가격으로_내림차순_정렬() {
-        ProductSearchRequest request = new ProductSearchRequest(0, 1, List.of(new SortConditionDTO("PRICE", SortDirection.DESC)));
+        ProductSearchRequest request = new ProductSearchRequest(0, 1, List.of(new SortRequestCondition("PRICE", SortDirection.DESC)));
         List<ProductDTO> result = productService.findProducts(request);
 
         assertEquals(1, result.size());
@@ -62,8 +62,8 @@ public class ProductQueryServiceTest {
     void 날짜을_내림차순_가격을_오름차순_정렬() {
         ProductSearchRequest request = new ProductSearchRequest(
                 0, 1,
-                List.of(new SortConditionDTO("CREATED", SortDirection.DESC),
-                        new SortConditionDTO("PRICE", SortDirection.ASC))
+                List.of(new SortRequestCondition("CREATED", SortDirection.DESC),
+                        new SortRequestCondition("PRICE", SortDirection.ASC))
         );
         List<ProductDTO> result = productService.findProducts(request);
 

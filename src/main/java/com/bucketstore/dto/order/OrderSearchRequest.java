@@ -1,6 +1,6 @@
 package com.bucketstore.dto.order;
 
-import com.bucketstore.common.dto.SortConditionDTO;
+import com.bucketstore.common.dto.SortRequestCondition;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -12,5 +12,5 @@ public record OrderSearchRequest(
         @Schema(description = "조회 개수", example = "10")
         int size,
         @Schema(description = "정렬 조건 목록")
-        List<SortConditionDTO> sort
+        List<SortRequestCondition> sort
 ) {}
