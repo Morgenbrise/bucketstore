@@ -1,11 +1,15 @@
 package com.bucketstore.controller;
 
+import com.bucketstore.common.dto.SortConditionDTO;
 import com.bucketstore.domain.Orders;
 import com.bucketstore.dto.order.CancelOrderRequest;
 import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
+import com.bucketstore.dto.order.OrderSearchRequest;
+import com.bucketstore.dto.product.ProductSearchRequest;
 import com.bucketstore.service.OrdersService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +56,14 @@ public class OrderController {
             @RequestBody @Valid CancelOrderRequest request
     ) {
         ordersService.cancelOrderItems(request.orderId(), request.orderItemIds());
+    }
+
+    @Operation(summary = "정렬 조건에 따라 주문 목록 조회")
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getOrders(
+            @ModelAttribute OrderSearchRequest request
+    ) {
+        List<OrderResponse> result = ordersService.findOrders(request);
+        return ResponseEntity.ok(result);
     }
 }

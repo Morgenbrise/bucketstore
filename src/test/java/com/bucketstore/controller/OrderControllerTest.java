@@ -2,6 +2,7 @@ package com.bucketstore.controller;
 
 import com.bucketstore.domain.Orders;
 import com.bucketstore.dto.order.OrderCreateRequest;
+import com.bucketstore.dto.order.OrderResponse;
 import com.bucketstore.enums.OrderStatus;
 import com.bucketstore.service.OrdersService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,8 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -96,5 +96,40 @@ class OrderControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(ordersService).cancelOrderItems(eq(1L), eq(List.of(1L, 2L)));
+    }
+
+    @Test
+    @DisplayName("정렬 조건으로 주문 목록 조회")
+    void getOrders_success() throws Exception {
+        // given
+        List<OrderResponse> orders = List.of(
+                OrderResponse.builder()
+                        .orderCode("ORDER001")
+                        .totalPrice(30000)
+                        .deliveryFee(3000)
+                        .orderStatus("PENDING")
+                        .build(),
+                OrderResponse.builder()
+                        .orderCode("ORDER002")
+                        .totalPrice(10000)
+                        .deliveryFee(2000)
+                        .orderStatus("CANCELED")
+                        .build()
+        );
+
+        given(ordersService.findOrders(any())).willReturn(orders);
+
+        // when & then
+        mockMvc.perform(get("/api/orders")
+                        .param("offset", "0")
+                        .param("size", "10")
+                        .param("sort[0].code", "CREATED")
+                        .param("sort[0].direction", "DESC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].ORDER_CODE").value("ORDER001"))
+                .andExpect(jsonPath("$[0].TOTAL_PRICE").value(30000))
+                .andExpect(jsonPath("$[1].ORDER_CODE").value("ORDER002"))
+                .andExpect(jsonPath("$[1].ORDER_STATUS").value("CANCELED"));
+
     }
 }
