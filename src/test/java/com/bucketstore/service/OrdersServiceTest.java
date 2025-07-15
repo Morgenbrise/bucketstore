@@ -1,12 +1,17 @@
 package com.bucketstore.service;
 
+import com.bucketstore.common.dto.SortConditionDTO;
 import com.bucketstore.domain.OrderDelivery;
 import com.bucketstore.domain.OrderItem;
 import com.bucketstore.domain.Orders;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.order.OrderCreateRequest;
+import com.bucketstore.dto.order.OrderResponse;
+import com.bucketstore.dto.order.OrderSearchRequest;
+import com.bucketstore.enums.OrderDisplayableCode;
 import com.bucketstore.enums.OrderItemStatus;
 import com.bucketstore.enums.OrderStatus;
+import com.bucketstore.enums.SortDirection;
 import com.bucketstore.repository.order.OrdersRepository;
 import com.bucketstore.repository.orderItem.OrderItemRepository;
 import com.bucketstore.repository.product.ProductRepository;
@@ -94,4 +99,37 @@ public class OrdersServiceTest {
                 assertEquals(OrderItemStatus.CANCELED, item.getItemStatus()));
     }
 
+    @Test
+    @DisplayName("주문을 총 결제금액 기준으로 내림차순 정렬하여 조회")
+    void findOrdersSortedByPriceDesc() {
+        // given
+        OrderSearchRequest request = new OrderSearchRequest(
+                0,
+                10,
+                List.of(new SortConditionDTO("PRICE", SortDirection.DESC))
+        );
+
+        // when
+        List<OrderResponse> results = ordersService.findOrders(request);
+
+        // then
+        assertEquals(2, results.size());
+        assertEquals("ORDER002", results.get(0).getOrderCode());
+        assertEquals("ORDER001", results.get(1).getOrderCode());
+    }
+
+    @Test
+    @DisplayName("주문을 주문일 기준 오름차순으로 정렬하여 조회")
+    void findOrdersSortedByCreatedAsc() {
+        OrderSearchRequest request = new OrderSearchRequest(
+                0,
+                10,
+                List.of(new SortConditionDTO("CREATED", SortDirection.ASC))
+        );
+
+        List<OrderResponse> results = ordersService.findOrders(request);
+
+        assertEquals("ORDER001", results.get(0).getOrderCode());
+        assertEquals("ORDER002", results.get(1).getOrderCode());
+    }
 }

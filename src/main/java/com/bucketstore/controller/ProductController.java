@@ -2,6 +2,7 @@ package com.bucketstore.controller;
 
 import com.bucketstore.dto.product.ProductDTO;
 import com.bucketstore.dto.product.ProductSearchRequest;
+import com.bucketstore.enums.OrderDisplayableCode;
 import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortCondition;
 import com.bucketstore.enums.SortDirection;
@@ -42,12 +43,9 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<List<ProductDTO>> getProducts(@ModelAttribute ProductSearchRequest request) {
 
-        List<SortCondition> conditions = request.getSort() == null ? List.of() :
-                request.getSort().stream()
-                        .map(dto -> new SortCondition(
-                                ProductDisplayableCode.from(dto.code().getCode()),
-                                SortDirection.from(dto.direction().name())))
-                        .toList();
+        List<SortCondition> conditions = request.getSort().stream()
+                .map(s -> new SortCondition(OrderDisplayableCode.from(s.getCode()), s.getDirection()))
+                .toList();
 
         List<ProductDTO> result = productService.findProducts(request.getPage(), request.getSize(), conditions);
         return ResponseEntity.ok(result);

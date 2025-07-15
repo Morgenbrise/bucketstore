@@ -4,11 +4,23 @@ import com.bucketstore.enums.ProductDisplayableCode;
 import com.bucketstore.enums.SortDirection;
 import com.bucketstore.ports.SortableField;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.data.domain.Sort;
 
-public record SortConditionDTO(
-        @Schema(description = "정렬 필드", example = "PRICE", implementation = SortableField.class)
-        ProductDisplayableCode code,
+import java.util.function.Function;
 
-        @Schema(description = "정렬 방향", example = "ASC", implementation = SortDirection.class)
-        SortDirection direction
-) {}
+@Getter
+@AllArgsConstructor
+public class SortConditionDTO {
+
+        @Schema(description = "정렬 필드 코드", example = "PRICE")
+        private String code;
+
+        @Schema(description = "정렬 방향", example = "ASC")
+        private SortDirection direction;
+
+        public <T extends SortableField> Sort.Order toOrder(Function<String, T> codeResolver) {
+                return codeResolver.apply(code).toOrder(direction);
+        }
+}
