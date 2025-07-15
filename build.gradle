@@ -25,6 +25,23 @@ repositories {
 	mavenCentral()
 }
 
+// ✅ Q 클래스 생성 디렉토리
+def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
+
+// ✅ Q 클래스 sourceSets에 추가
+sourceSets {
+	main {
+		java {
+			srcDir querydslDir
+		}
+	}
+}
+
+// ✅ 컴파일 타스크에 Q 클래스 생성 디렉토리 지정
+tasks.withType(JavaCompile).configureEach {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -38,6 +55,11 @@ dependencies {
 		exclude group: 'org.junit.vintage' // JUnit 4 제거 (선택)
 	}
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+	implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api:2.1.1"
 }
 
 tasks.named('test') {
