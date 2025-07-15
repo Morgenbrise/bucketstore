@@ -32,6 +32,8 @@ public class OrdersService {
     private final OrderItemRepository orderItemRepository;
     private final OrderDeliveryRepository orderDeliveryRepository;
 
+    private static final int CANCEL_DELIVERY_DISCOUNT = 3000;
+
     @Transactional
     public Orders createOrder(OrderCreateRequest request) {
         // 1. 사용자 확인
@@ -105,6 +107,25 @@ public class OrdersService {
 
     private String generateOrderCode() {
         return "ORDER_" + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    public void cancelOrderItem(Long orderId, Long orderItemId) {
+        Orders order = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+        OrderItem item = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 아이템입니다."));
+
+        if (!item.getOrder().getOrderId().equals(order.getOrderId())) {
+            throw new IllegalStateException("주문과 주문 아이템이 일치하지 않습니다.");
+        }
+
+        if (item.isCanceled()) {
+            throw new IllegalStateException("이미 취소된 주문 항목입니다.");
+        }
+
+        // 취소 처리
+        order.cancelOrderItem(item, CANCEL_DELIVERY_DISCOUNT);
     }
 
 }

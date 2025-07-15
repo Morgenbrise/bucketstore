@@ -5,6 +5,7 @@ import com.bucketstore.domain.OrderItem;
 import com.bucketstore.domain.Orders;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.order.OrderCreateRequest;
+import com.bucketstore.enums.OrderItemStatus;
 import com.bucketstore.enums.OrderStatus;
 import com.bucketstore.repository.order.OrdersRepository;
 import com.bucketstore.repository.orderItem.OrderItemRepository;
@@ -24,11 +25,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("OrderService - 주문 생성 테스트")
+@DisplayName("OrderService - 주문 테스트")
 @ExtendWith(SpringExtension.class)
 @Transactional
 @Rollback
 @SpringBootTest
+@ActiveProfiles("test")
 public class OrdersServiceTest {
 
     @Autowired
@@ -74,6 +76,23 @@ public class OrdersServiceTest {
         OrderDelivery delivery = order.getDelivery();
         assertEquals("홍길동", delivery.getReceiverName());
         assertEquals("서울시 강남구", delivery.getAddress());
+    }
+
+    @Test
+    void 특정_주문_상품을_취소하고_배송비를_차감한다() {
+        Long orderId = 1L;
+        Long orderItemId = 1L;
+
+        // when
+        ordersService.cancelOrderItem(orderId, orderItemId);
+
+        // then
+        Orders order = ordersRepository.findById(orderId).orElseThrow();
+        OrderItem item = orderItemRepository.findById(orderItemId).orElseThrow();
+
+        assertTrue(item.isCanceled()); // 주문 아이템 취소 상태 확인
+        assertEquals(27000, order.getTotalPrice()); // 기존 30000원 → 27000원으로 변경 (배송비 0은 유지)
+        assertEquals(OrderItemStatus.CANCELED, item.getItemStatus()); // 상태는 바뀌지 않음 (필요 시 CANCELED 처리도 가능)
     }
 
 }

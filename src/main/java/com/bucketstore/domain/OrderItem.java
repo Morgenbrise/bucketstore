@@ -1,5 +1,7 @@
 package com.bucketstore.domain;
 
+import com.bucketstore.enums.OrderItemStatus;
+import com.bucketstore.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class OrderItem extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;
@@ -27,4 +30,16 @@ public class OrderItem extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "optionId")
     private ProductOption option;
+
+    @Convert(converter = OrderItemStatus.ConverterImpl.class)
+    @Builder.Default
+    private OrderItemStatus itemStatus = OrderItemStatus.ORDERED;
+
+    public void cancel() {
+        this.itemStatus = OrderItemStatus.CANCELED;
+    }
+
+    public boolean isCanceled() {
+        return this.itemStatus == OrderItemStatus.CANCELED;
+    }
 }
