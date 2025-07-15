@@ -2,11 +2,11 @@ package com.bucketstore.service;
 
 import com.bucketstore.common.utils.PageRequestUtils;
 import com.bucketstore.domain.Product;
-import com.bucketstore.dto.ProductDTO;
-import com.bucketstore.enumType.ProductSortField;
-import com.bucketstore.enumType.SortCondition;
-import com.bucketstore.enumType.SortDirection;
-import com.bucketstore.repository.ProductRepository;
+import com.bucketstore.dto.product.ProductDTO;
+import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.SortCondition;
+import com.bucketstore.enums.SortDirection;
+import com.bucketstore.repository.product.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

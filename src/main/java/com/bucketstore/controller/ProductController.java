@@ -1,10 +1,10 @@
 package com.bucketstore.controller;
 
-import com.bucketstore.dto.ProductDTO;
-import com.bucketstore.dto.ProductSearchRequest;
-import com.bucketstore.enumType.ProductSortField;
-import com.bucketstore.enumType.SortCondition;
-import com.bucketstore.enumType.SortDirection;
+import com.bucketstore.dto.product.ProductDTO;
+import com.bucketstore.dto.product.ProductSearchRequest;
+import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.SortCondition;
+import com.bucketstore.enums.SortDirection;
 import com.bucketstore.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

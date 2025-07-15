@@ -1,9 +1,9 @@
 package com.bucketstore.common.utils;
 
-import com.bucketstore.enumType.ProductSortField;
-import com.bucketstore.enumType.SortCondition;
-import com.bucketstore.enumType.SortDirection;
-import com.bucketstore.inter.SortField;
+import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.SortCondition;
+import com.bucketstore.enums.SortDirection;
+import com.bucketstore.ports.SortField;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

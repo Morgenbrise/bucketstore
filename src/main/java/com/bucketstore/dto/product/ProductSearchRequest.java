@@ -1,5 +1,6 @@
-package com.bucketstore.dto;
+package com.bucketstore.dto.product;
 
+import com.bucketstore.common.dto.SortConditionDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

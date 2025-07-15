@@ -1,4 +1,4 @@
-package com.bucketstore.enumType;
+package com.bucketstore.enums;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

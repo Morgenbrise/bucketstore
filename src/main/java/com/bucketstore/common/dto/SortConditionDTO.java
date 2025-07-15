@@ -1,7 +1,7 @@
-package com.bucketstore.dto;
+package com.bucketstore.common.dto;
 
-import com.bucketstore.enumType.ProductSortField;
-import com.bucketstore.enumType.SortDirection;
+import com.bucketstore.enums.ProductSortField;
+import com.bucketstore.enums.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record SortConditionDTO(

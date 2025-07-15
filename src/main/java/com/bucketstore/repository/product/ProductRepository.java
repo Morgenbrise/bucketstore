@@ -1,4 +1,4 @@
-package com.bucketstore.repository;
+package com.bucketstore.repository.product;
 
 import com.bucketstore.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;

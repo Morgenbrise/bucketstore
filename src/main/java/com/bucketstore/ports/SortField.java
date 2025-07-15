@@ -1,6 +1,6 @@
-package com.bucketstore.inter;
+package com.bucketstore.ports;
 
-import com.bucketstore.enumType.SortDirection;
+import com.bucketstore.enums.SortDirection;
 import org.springframework.data.domain.Sort;
 
 public interface SortField {

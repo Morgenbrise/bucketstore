@@ -1,4 +1,4 @@
-package com.bucketstore.dto;
+package com.bucketstore.dto.product;
 
 import com.bucketstore.domain.Product;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,9 +1,9 @@
 package com.bucketstore.service;
 
 import com.bucketstore.common.utils.PageRequestUtils;
-import com.bucketstore.dto.ProductDTO;
-import com.bucketstore.enumType.SortCondition;
-import com.bucketstore.repository.ProductRepository;
+import com.bucketstore.dto.product.ProductDTO;
+import com.bucketstore.enums.SortCondition;
+import com.bucketstore.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
