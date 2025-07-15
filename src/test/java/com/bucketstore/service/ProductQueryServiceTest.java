@@ -1,10 +1,9 @@
 package com.bucketstore.service;
 
-import com.bucketstore.common.utils.PageRequestUtils;
+import com.bucketstore.common.dto.SortConditionDTO;
 import com.bucketstore.domain.Product;
 import com.bucketstore.dto.product.ProductDTO;
-import com.bucketstore.enums.ProductDisplayableCode;
-import com.bucketstore.enums.SortCondition;
+import com.bucketstore.dto.product.ProductSearchRequest;
 import com.bucketstore.enums.SortDirection;
 import com.bucketstore.repository.product.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +26,7 @@ public class ProductQueryServiceTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductService productQueryService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
@@ -42,9 +40,9 @@ public class ProductQueryServiceTest {
 
     @Test
     void 상품명으로_오름차순_정렬() {
+        ProductSearchRequest request = new ProductSearchRequest(0, 2, List.of(new SortConditionDTO("NAME", SortDirection.ASC)));
 
-        List<SortCondition> sortConditions = List.of(new SortCondition(ProductDisplayableCode.NAME, SortDirection.ASC));
-        List<ProductDTO> result = productQueryService.findProducts(0, 2, sortConditions);
+        List<ProductDTO> result = productService.findProducts(request);
 
         assertEquals(2, result.size());
         assertEquals("상품A", result.get(0).getProductName());
@@ -53,19 +51,30 @@ public class ProductQueryServiceTest {
 
     @Test
     void 가격으로_내림차순_정렬() {
-        List<SortCondition> sortConditions = List.of(new SortCondition(ProductDisplayableCode.PRICE, SortDirection.DESC));
-
-        List<ProductDTO> result = productQueryService.findProducts(0, 1, sortConditions);
+        ProductSearchRequest request = new ProductSearchRequest(0, 1, List.of(new SortConditionDTO("PRICE", SortDirection.DESC)));
+        List<ProductDTO> result = productService.findProducts(request);
 
         assertEquals(1, result.size());
         assertEquals(30000, result.get(0).getBasePrice());
     }
 
     @Test
-    void 정렬조건_없을때는_기본값으로_정렬() {
-        Pageable pageable = PageRequestUtils.of(0, 2, List.of());
+    void 날짜을_내림차순_가격을_오름차순_정렬() {
+        ProductSearchRequest request = new ProductSearchRequest(
+                0, 1,
+                List.of(new SortConditionDTO("CREATED", SortDirection.DESC),
+                        new SortConditionDTO("PRICE", SortDirection.ASC))
+        );
+        List<ProductDTO> result = productService.findProducts(request);
 
-        List<ProductDTO> result = productQueryService.findProducts(0, 2, List.of());
+        assertEquals(1, result.size());
+        assertEquals(10000, result.get(0).getBasePrice());
+    }
+
+    @Test
+    void 정렬조건_없을때는_기본값으로_정렬() {
+        ProductSearchRequest request = new ProductSearchRequest(0, 2, List.of());
+        List<ProductDTO> result = productService.findProducts(request);
 
         assertEquals(2, result.size());
         // 기본값이 CREATED DESC면, 생성 순서 반대로 나와야 함

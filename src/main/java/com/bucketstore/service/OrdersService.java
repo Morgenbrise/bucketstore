@@ -1,6 +1,5 @@
 package com.bucketstore.service;
 
-import com.bucketstore.common.utils.PageRequestUtils;
 import com.bucketstore.domain.*;
 import com.bucketstore.dto.order.OrderCreateRequest;
 import com.bucketstore.dto.order.OrderResponse;
@@ -15,15 +14,12 @@ import com.bucketstore.repository.product.ProductRepository;
 import com.bucketstore.repository.product.ProductOptionRepository;
 import com.bucketstore.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -147,13 +143,7 @@ public class OrdersService {
         List<SortCondition> sortConditions = request.sort().stream()
                 .map(s -> new SortCondition(OrderDisplayableCode.from(s.getCode()), s.getDirection()))
                 .toList();
-
-        Pageable pageable = PageRequestUtils.of(request.offset() / request.size(), request.size(), sortConditions);
-
-        return ordersRepository.findAll(pageable)
-                .stream()
-                .map(OrderResponse::from)
-                .toList();
+        return ordersRepository.findOrders(request);
 
     }
 }

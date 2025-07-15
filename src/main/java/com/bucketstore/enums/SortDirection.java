@@ -1,5 +1,6 @@
 package com.bucketstore.enums;
 
+import com.querydsl.core.types.Order;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "정렬 방향", example = "ASC")
@@ -20,4 +21,7 @@ public enum SortDirection {
         return this == ASC ? org.springframework.data.domain.Sort.Direction.ASC : org.springframework.data.domain.Sort.Direction.DESC;
     }
 
+    public Order toQueryDslDirection() {
+        return this == ASC ? Order.ASC : Order.DESC;
+    }
 }

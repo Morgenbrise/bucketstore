@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,14 +45,7 @@ class ProductControllerTest {
                         .build()
         );
 
-        when(productService.findProducts(
-                eq(0), eq(2),
-                argThat(conditions ->
-                        conditions.size() == 2 &&
-                                conditions.get(0).field() == ProductDisplayableCode.PRICE &&
-                                conditions.get(0).direction() == SortDirection.DESC
-                )
-        )).thenReturn(mockProducts);
+        when(productService.findProducts(any())).thenReturn(mockProducts);
 
         // when & then
         mockMvc.perform(get("/api/products/search")

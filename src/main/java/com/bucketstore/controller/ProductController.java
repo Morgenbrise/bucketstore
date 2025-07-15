@@ -42,12 +42,7 @@ public class ProductController {
     })
     @GetMapping("/search")
     public ResponseEntity<List<ProductDTO>> getProducts(@ModelAttribute ProductSearchRequest request) {
-
-        List<SortCondition> conditions = request.getSort().stream()
-                .map(s -> new SortCondition(OrderDisplayableCode.from(s.getCode()), s.getDirection()))
-                .toList();
-
-        List<ProductDTO> result = productService.findProducts(request.getPage(), request.getSize(), conditions);
+        List<ProductDTO> result = productService.findProducts(request);
         return ResponseEntity.ok(result);
     }
 }
