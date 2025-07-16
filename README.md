@@ -55,7 +55,7 @@ datasource:
 ```
 
 ### 3.3 MySQL 백업 (Raw 링크)
-- [bucketstore_dump.sql 직접 다운로드](https://raw.githubusercontent.com/Morgenbrise/bucketstore/main/dump/bucketstore_backup.sql)
+- [MySQL 덤프 파일 다운로드](./dump/bucketstore_backup.sql)
 
 ### 3.4 실행
 ```bash
