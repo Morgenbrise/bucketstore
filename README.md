@@ -77,7 +77,7 @@ src/test/resources/data.sql에 초기 테스트용 데이터 작성
 
 Swagger UI는 다음 URL에서 확인할 수 있습니다
 
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8088/swagger-ui/index.html
 
 
 ### 문서화된 주요 API
