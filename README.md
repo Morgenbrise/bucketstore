@@ -53,7 +53,11 @@ datasource:
     password: [패스워드]
     driver-class-name: com.mysql.cj.jdbc.Driver
 ```
-### 3.3 실행
+
+### 3.3 MySQL 백업 (Raw 링크)
+- [bucketstore_dump.sql 직접 다운로드](https://raw.githubusercontent.com/Morgenbrise/bucketstore/main/dump/bucketstore_backup.sql)
+
+### 3.4 실행
 ```bash
 ./gradlew bootRun
 ```
