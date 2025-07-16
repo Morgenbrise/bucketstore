@@ -12,19 +12,19 @@ import java.util.List;
 @Builder
 public class OrderDetailResponse {
 
-    @Schema(description = "주문 ID")
+    @Schema(description = "주문 ID", example = "1")
     private final Long orderId;
 
-    @Schema(description = "주문 코드")
+    @Schema(description = "주문 코드", example = "ORDER001")
     private final String orderCode;
 
-    @Schema(description = "결제 금액 (취소 반영 후)")
+    @Schema(description = "총 결제 금액", example = "20000")
     private final int totalPrice;
 
-    @Schema(description = "주문 상품 내역")
+    @Schema(description = "주문 상품 목록")
     private final List<OrderItemResponse> items;
 
-    @Schema(description = "취소된 주문 항목")
+    @Schema(description = "취소된 상품 목록")
     private final List<OrderItemResponse> canceledItems;
 
     public static OrderDetailResponse from(

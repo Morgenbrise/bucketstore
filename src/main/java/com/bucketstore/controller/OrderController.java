@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/orders")
-@Tag(name = "Order", description = "주문 관련 API")
+@Tag(name = "주문", description = "주문 관련 API")
 public class OrderController {
 
     private final OrdersService ordersService;
@@ -68,7 +68,14 @@ public class OrderController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(summary = "주문 상세 조회", description = "주문 식별자로 주문 상세 정보를 조회합니다.")
+    @Operation(
+            summary = "주문 상세 조회",
+            description = "주문 식별자로 주문 상세 정보를 조회합니다.\n\n" +
+                    "- 결제 금액, 배송비 차감 금액\n" +
+                    "- 주문 상품 목록 및 상태 (주문됨/취소됨)\n" +
+                    "- 모든 정보는 OrderItem 기준으로 구성"
+    )
+    @ApiResponse(responseCode = "200", description = "정상 응답")
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable Long orderId) {
         OrderDetailResponse response = orderDetailService.findOrderDetail(orderId);

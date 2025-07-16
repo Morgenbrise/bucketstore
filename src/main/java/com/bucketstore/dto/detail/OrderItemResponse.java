@@ -10,28 +10,28 @@ import lombok.Getter;
 @Builder
 public class OrderItemResponse {
 
-    @Schema(description = "상품명")
+    @Schema(description = "상품명", example = "티셔츠")
     private final String productName;
 
-    @Schema(description = "옵션 사이즈")
+    @Schema(description = "옵션 사이즈", example = "M")
     private final String size;
 
-    @Schema(description = "수량")
+    @Schema(description = "수량", example = "2")
     private final int quantity;
 
-    @Schema(description = "상품 가격 (수량 * 옵션가격 포함)", example = "20000")
+    @Schema(description = "상품 총 가격", example = "20000")
     private final int itemPrice;
 
-    @Schema(description = "단가")
+    @Schema(description = "단가", example = "10000")
     private final int unitPrice;
 
-    @Schema(description = "배송비")
+    @Schema(description = "취소 배송비", example = "3000")
     private final int deliveryFee;
 
-    @Schema(description = "총 금액")
+    @Schema(description = "총 금액", example = "20000")
     private final int totalPrice;
 
-    @Schema(description = "주문 상태")
+    @Schema(description = "상태", example = "주문됨")
     private final String status;
 
     public static OrderItemResponse from(OrderItem item) {
